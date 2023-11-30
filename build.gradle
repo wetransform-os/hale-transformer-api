@@ -47,3 +47,10 @@ spotless {
 		target '*.gradle' // default target of groovyGradle
 	}
 }
+
+/*
+ * Gradle wrapper
+ */
+wrapper {
+	gradleVersion = '8.4'
+}
