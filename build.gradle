@@ -34,13 +34,16 @@ tasks.named('test') {
 
 spotless {
 	java {
-		importOrder('groovy', 'java', 'javax', '')
+		palantirJavaFormat()
+		importOrder('java', 'javax', '')
+		removeUnusedImports()
 		indentWithSpaces(4)
 		trimTrailingWhitespace()
 		endWithNewline()
+
+		target 'src/*/java/**/*.java'
 	}
 	groovyGradle {
 		target '*.gradle' // default target of groovyGradle
-		greclipse()
 	}
 }
