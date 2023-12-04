@@ -9,7 +9,8 @@ group = 'to.wetransform.hale'
 version = '0.0.1-SNAPSHOT'
 
 java {
-	sourceCompatibility = '17'
+	sourceCompatibility = JavaVersion.VERSION_17
+	targetCompatibility = JavaVersion.VERSION_17
 }
 
 repositories {
@@ -17,11 +18,11 @@ repositories {
 }
 
 dependencies {
+	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-quartz'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'com.github.docker-java:docker-java-core:3.3.3'
-	implementation 'com.github.docker-java:docker-java-transport-httpclient5:3.3.3'
+	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 
 	//developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
