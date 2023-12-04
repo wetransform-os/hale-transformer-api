@@ -14,7 +14,22 @@ java {
 }
 
 repositories {
+	// mavenLocal() //XXX for testing
+	maven {
+		// wetransform release repository (hale releases and Eclipse dependencies)
+		url 'https://artifactory.wetransform.to/artifactory/local'
+	}
+	// this needs to be defined before jcenter/MavenCentral for retrieving JAI
+	maven {
+		url 'https://repo.osgeo.org/repository/release/'
+	}
 	mavenCentral()
+}
+
+project.ext {
+	haleVersion = '5.1.0-SNAPSHOT'
+	cliVersion = '5.1.0-SNAPSHOT'
+	groovyVersion = '2.5.19'
 }
 
 dependencies {
@@ -25,8 +40,32 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-amqp'
 	implementation 'org.apache.httpcomponents.client5:httpclient5:5.2.1'
 
+	// hale
+	implementation 'eu.esdihumboldt.unpuzzled:org.eclipse.equinox.nonosgi.registry:1.0.0'
+	implementation "to.wetransform:hale-cli:$cliVersion", {
+		/*
+		 * XXX The dependencies introduced by the schematron bundle cause some problems.
+		 */
+		exclude group: 'eu.esdihumboldt.hale', module: 'eu.esdihumboldt.hale.io.schematron'
+	}
+
+	implementation "eu.esdihumboldt.hale:eu.esdihumboldt.hale.app.cli.commands:$haleVersion"
+	implementation "org.codehaus.groovy:groovy-all:$groovyVersion"
+	implementation 'org.json:json:20190722'
+	implementation 'org.slf4j:jul-to-slf4j:1.7.21'
+	implementation 'org.apache.httpcomponents:httpmime:4.5.14'
+
 	//developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+	// Logging
+	testRuntimeOnly 'ch.qos.logback:logback-core:1.4.11'
+	testRuntimeOnly 'ch.qos.logback:logback-classic:1.4.11'
+}
+
+configurations.all {
+	// ensure SNAPSHOTs are updated every time if needed
+	resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
 }
 
 tasks.named('test') {
