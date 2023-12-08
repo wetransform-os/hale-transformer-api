@@ -28,11 +28,15 @@ public class TransformerApiApplication {
 
     @Bean
     Queue queue() {
+        // TODO Queue should be declared passively, i.e. it should be created
+        // outside of this application
         return new Queue(QUEUE_NAME, false);
     }
 
     @Bean
     TopicExchange exchange() {
+        // TODO Exchange should be declared passively, i.e. it should be created
+        // outside of this application
         return new TopicExchange(TOPIC_EXCHANGE_NAME);
     }
 

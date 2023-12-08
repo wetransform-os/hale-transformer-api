@@ -1,7 +1,7 @@
 package to.wetransform.hale.transformer.api.messaging;
 
 import java.io.Serializable;
-import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.slf4j.Logger;
@@ -22,15 +22,25 @@ public class TransformationMessageConsumer {
 
     private static final Logger LOG = LoggerFactory.getLogger(TransformationMessageConsumer.class);
 
-    private CountDownLatch latch = new CountDownLatch(1);
-
     @RabbitListener(queues = TransformerApiApplication.QUEUE_NAME)
     public void receiveMessage(final TransformationMessage message) {
         LOG.info("Received projectUrl = " + message.projectUrl + "  sourceDataUrl = " + message.sourceDataUrl);
-        latch.countDown();
-    }
 
-    public CountDownLatch getLatch() {
-        return latch;
+        // TODO Implement mechanism to only accept a message from the queue if no
+        // transformation is currently running
+
+        if (message.projectUrl != null && message.sourceDataUrl() != null) {
+            Transformer tx = new Transformer();
+
+            try {
+                tx.transform();
+                tx.getLatch().await(10, TimeUnit.MINUTES); // TODO make configurable
+            } catch (InterruptedException e) {
+                // TODO What should be done when the transformation fails or times out?
+                // - Simply requeuing the message is probably not helpful
+                // - Send a message back so that the producer can react?
+                LOG.error("Transformation process timed out: " + e.getMessage(), e);
+            }
+        }
     }
 }
