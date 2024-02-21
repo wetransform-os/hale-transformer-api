@@ -92,5 +92,5 @@ spotless {
  * Gradle wrapper
  */
 wrapper {
-	gradleVersion = '8.4'
+	gradleVersion = '8.6'
 }
