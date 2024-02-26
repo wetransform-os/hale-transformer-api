@@ -45,8 +45,10 @@ public class Transformer {
     private static final Logger LOG = LoggerFactory.getLogger(Transformer.class);
 
     private final CountDownLatch latch = new CountDownLatch(1);
+    private TargetConfig targetConfig;
+    private ExecContext execContext;
 
-    public void transform(String sourceDataURL, String projectURL, String targetURL) {
+    public void transform(String sourceDataUrl, String projectUrl, String targetFileName) {
         File transformationLogFile = null;
 
         try {
@@ -62,22 +64,22 @@ public class Transformer {
             Init.init();
             logPlatformVersion();
 
-            ExecContext context = new ExecContext();
+            execContext = new ExecContext();
 
             // Set up project URI
-            URI projectUri = new URI(projectURL);
-            context.setProject(projectUri);
+            URI projectUri = new URI(projectUrl);
+            execContext.setProject(projectUri);
             // Load project
             Project project = loadProject(projectUri);
 
-            Value sourceCrs = initializeSourceConfig(context, sourceDataURL);
+            Value sourceCrs = initializeSourceConfig(execContext, sourceDataUrl);
 
-            TargetConfig targetConfig = configureTarget(project, sourceCrs);
-            configureTargetContext(context, tempDirectory, targetConfig, reportFile);
+            targetConfig = configureTarget(project, sourceCrs, targetFileName);
+            configureTargetContext(execContext, tempDirectory, targetConfig, reportFile);
 
             // run the transformation
             LOG.info("Transforming started.");
-            new ExecTransformation().run(context);
+            new ExecTransformation().run(execContext);
 
             // evaluate results
             boolean success = evaluateTransformationResults(reportFile);
@@ -86,11 +88,16 @@ public class Transformer {
             LOG.error("Failed to execute transformation: {}", t.getMessage(), t);
         } finally {
             latch.countDown();
-            deleteDir(transformationLogFile.getParentFile());
         }
     }
 
-    // Extracted Methods
+    public TargetConfig getTargetConfig() {
+        return targetConfig;
+    }
+
+    public ExecContext getExecContext() {
+        return execContext;
+    }
 
     private Path createTempDirectory() throws IOException {
         return Files.createTempDirectory("hale-transformer");
@@ -245,12 +252,11 @@ public class Transformer {
         return result;
     }
 
-    private TargetConfig configureTarget(Project lp, Value sourceCrs) {
-        String filename;
+    private TargetConfig configureTarget(Project project, Value sourceCrs, String filename) {
         String preset = null;
         CustomTarget customTarget = null;
 
-        Map<String, IOConfiguration> presets = getPresets(lp);
+        Map<String, IOConfiguration> presets = getPresets(project);
 
         // Preset names
         String defaultPreset = "default";
@@ -260,12 +266,10 @@ public class Transformer {
             // Project contains hale-connect preset
             preset = hcPreset;
             IOConfiguration ioConfiguration = presets.get(hcPreset);
-            filename = determineTargetFileName(ioConfiguration);
         } else if (presets.containsKey(defaultPreset)) {
             // Project contains default preset
             preset = defaultPreset;
             IOConfiguration ioConfiguration = presets.get(defaultPreset);
-            filename = determineTargetFileName(ioConfiguration);
         } else {
             // No specific presets found, creating a custom target configuration
 
@@ -291,7 +295,6 @@ public class Transformer {
             // Create a custom target configuration
             CustomTarget target = new CustomTarget(targetProvider, targetMap);
 
-            filename = "inspire.gml";
             customTarget = target;
         }
 

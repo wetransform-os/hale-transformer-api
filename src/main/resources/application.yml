@@ -1,0 +1,10 @@
+spring:
+  rabbitmq:
+    host: ${RABBITMQ_HOSTNAME}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+
+management:
+  health:
+    probes:
+      enabled: true
