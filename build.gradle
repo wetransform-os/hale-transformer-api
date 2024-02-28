@@ -33,7 +33,7 @@ repositories {
 project.ext {
 	haleVersion = '5.1.0'
 	cliVersion = '5.1.0-SNAPSHOT'
-	groovyVersion = '2.5.19'
+	groovyVersion = '2.5.23'
 	logbackVersion = '1.4.11'
 }
 
