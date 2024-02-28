@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17.0.10_7-jdk AS builder
+FROM eclipse-temurin:21.0.2_13-jdk AS builder
 
 WORKDIR /app
 
@@ -19,7 +19,7 @@ RUN ./gradlew bootJar
 RUN java -Djarmode=layertools -jar build/libs/*.jar extract --destination build/extracted/
 
 # Create the final image
-FROM eclipse-temurin:17.0.10_7-jre
+FROM eclipse-temurin:21.0.2_13-jre
 
 WORKDIR /app
 
