@@ -7,6 +7,10 @@
           {
             "matchPackageNames": ["org.codehaus.groovy:groovy-all"],
             "allowedVersions": "<2.6.0"
+          },
+          {
+            "matchPackageNames": ["eclipse-temurin"],
+            "allowedVersions": "<18.0.0"
           }
     ]
 }
