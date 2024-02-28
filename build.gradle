@@ -67,7 +67,7 @@ dependencies {
 
 	// Logging
 	testRuntimeOnly 'ch.qos.logback:logback-core:1.4.11'
-	testRuntimeOnly 'ch.qos.logback:logback-classic:1.4.11'
+	testRuntimeOnly 'ch.qos.logback:logback-classic:1.5.0'
 }
 
 configurations.all {
