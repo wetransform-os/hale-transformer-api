@@ -34,6 +34,7 @@ project.ext {
 	haleVersion = '5.1.0'
 	cliVersion = '5.1.0-SNAPSHOT'
 	groovyVersion = '2.5.19'
+	logbackVersion = '1.4.11'
 }
 
 dependencies {
@@ -66,8 +67,8 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	// Logging
-	testRuntimeOnly 'ch.qos.logback:logback-core:1.4.11'
-	testRuntimeOnly 'ch.qos.logback:logback-classic:1.4.11'
+	testRuntimeOnly "ch.qos.logback:logback-core:$logbackVersion"
+	testRuntimeOnly "ch.qos.logback:logback-classic:$logbackVersion"
 }
 
 configurations.all {
