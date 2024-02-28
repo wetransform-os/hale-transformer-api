@@ -20,3 +20,6 @@ jobs:
 
     - name: Run check
       run: ./gradlew check
+
+    - name: Build Docker image
+      run: ./gradlew buildImage
