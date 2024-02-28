@@ -1,8 +1,12 @@
+import com.bmuschko.gradle.docker.tasks.image.*
+import com.bmuschko.gradle.docker.tasks.container.*
+
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.2'
 	id 'io.spring.dependency-management' version '1.1.4'
 	id 'com.diffplug.spotless' version '6.23.0'
+	id 'com.bmuschko.docker-spring-boot-application' version '9.3.6'
 }
 
 group = 'to.wetransform.hale'
@@ -91,6 +95,10 @@ spotless {
 	}
 }
 
+task buildImage(type: DockerBuildImage) {
+	inputDir = project.projectDir
+    images = ["harbor.develop.diplanung.de/diplan-develop/diplan-hale-transformer:latest"]
+}
 /*
  * Gradle wrapper
  */
