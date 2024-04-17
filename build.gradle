@@ -35,7 +35,7 @@ project.ext {
 	haleVersion = '5.1.0'
 	cliVersion = '5.1.0'
 	groovyVersion = '2.5.23'
-	logbackVersion = '1.5.3'
+	logbackVersion = '1.5.6'
 }
 
 dependencies {
