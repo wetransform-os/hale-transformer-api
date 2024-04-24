@@ -1,13 +1,10 @@
 {
     "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:recommended"
+        "github>wetransform/renovate-config:default.json5",
+        "github>wetransform/renovate-config:hale-studio.json5"
     ],
     "packageRules": [
-          {
-            "matchPackageNames": ["org.codehaus.groovy:groovy-all"],
-            "allowedVersions": "<2.6.0"
-          },
           {
             "matchPackageNames": ["eclipse-temurin"],
             "allowedVersions": "<18.0.0"
