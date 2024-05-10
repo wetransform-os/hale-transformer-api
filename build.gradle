@@ -47,7 +47,7 @@ dependencies {
 	implementation 'org.apache.httpcomponents.client5:httpclient5:5.3.1'
 
 	// S3 API
-	implementation 'software.amazon.awssdk:s3:2.24.12'
+	implementation 'software.amazon.awssdk:s3:2.25.49'
 
 	// hale
 	implementation 'eu.esdihumboldt.unpuzzled:org.eclipse.equinox.nonosgi.registry:1.0.0'
